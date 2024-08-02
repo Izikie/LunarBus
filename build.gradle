@@ -1,8 +1,9 @@
 plugins {
     id 'java'
+    id 'maven-publish'
 }
 
-group 'cc.izikie'
+group 'com.github.izikie'
 version '1.0.0'
 
 repositories {
@@ -16,4 +17,15 @@ dependencies {
 
 test {
     useJUnitPlatform()
+}
+
+javadoc {
+    enabled = true
+}
+
+java {
+    withSourcesJar()
+    withJavadocJar()
+    sourceCompatibility = JavaVersion.VERSION_21
+    targetCompatibility = JavaVersion.VERSION_21
 }

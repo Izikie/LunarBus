@@ -23,7 +23,7 @@ repositories {
 }
 
 dependencies {
-    implementation 'cc.izikie.bus/event:LunarBus:1.0.0'
+    implementation group ='com.github.Izikie', name = 'LunarBus', version = 'Tag'
 }
 ```
 
@@ -38,13 +38,66 @@ dependencies {
 
 <dependencies>
     <dependency>
-        <groupId>cc.izikie.bus</groupId>
-        <artifactId>event</artifactId>
-        <version>LunarBus:1.0.0</version>
-    </dependency>
+	    <groupId>com.github.Izikie</groupId>
+	    <artifactId>LunarBus</artifactId>
+	    <version>Tag</version>
+	</dependency>
 </dependencies>
 ```
 or the prebuilt artifacts on the [releases page](https://github.com/Izikie/LunarBus/releases/latest).
+
+## How to use
+
+```java
+public class Client {
+    public static final Client INSTANCE = new Client();
+    private final EventBusImpl bus = EventBus.newInstance()
+
+    private final NameTagMod nameTag = new NameTagMod()
+
+    public void init() {
+        bus.subscribe(nameTag)
+    }
+
+    public void unInit() {
+        bus.unsubscribe(nameTag)
+    }
+
+    public EventBusImpl getBus() {
+        return bus;
+    }
+}
+```
+
+#### Event Classes (Event, EventCancellable, EventState. EventStateCancellable)
+```java
+public class Render2D {
+    private final width, height
+
+    public Render2D(int width, int height) {
+        this.width = width;
+        this.height = height;
+    }
+
+    public void getWidth() {
+        return width;
+    }
+
+    public void getHeight() {
+        return height;
+    }
+}
+```
+
+```java
+public class NameTagMod {
+
+    @Listen
+    public final Listener<Render2D> render2DListener = event -> {
+        // Code
+    }
+}
+```
 
 # Benchmarks
 ### Soon™
