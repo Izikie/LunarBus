@@ -11,16 +11,6 @@ package cc.izikie.event;
  *     <li>{@link #POST} (2): Indicates the event has completed processing.</li>
  * </ul>
  *
- * <p>Example usage:</p>
- * <pre>
- * {@code
- * EventState event = new EventState(EventStates.PRE);
- * if (event.isPre()) {
- *     // Handle pre-state
- * }
- * }
- * </pre>
- *
  * @see EventState
  * @see EventStateCancellable
  */
