@@ -12,7 +12,7 @@ public final class UnsubBenchmarkTest {
         final long preTests = System.currentTimeMillis();
         final long preMemory = Runtime.getRuntime().totalMemory() - Runtime.getRuntime().freeMemory();
 
-        for (int i = 1_000_000; i > 0; --i) {
+        for (int i = 100_000_000; i > 0; --i) {
             bus.unsubscribe(this);
         }
 
@@ -20,6 +20,6 @@ public final class UnsubBenchmarkTest {
         final long postMemory = Runtime.getRuntime().totalMemory() - Runtime.getRuntime().freeMemory();
 
         System.out.printf("1,000,000 event calls took %sms\n", postTests - preTests);
-        System.out.printf("Memory used: %s mb\n", Helper.toMB(postMemory - preMemory));
+        System.out.printf("Memory used: %s mb\n", postMemory - preMemory);
     }
 }

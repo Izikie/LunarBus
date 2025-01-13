@@ -67,13 +67,13 @@ public final class EventBusImpl implements EventBus {
     @Override
     public void unsubscribe(final Object subscriber) {
         // Remove Subscriber
-        List<TypedListener> listeners = subscriberMap.remove(subscriber);
+        final List<TypedListener> listeners = subscriberMap.remove(subscriber);
         if (listeners == null)
             return;
 
         // Remove Listeners From Cache
-        for (TypedListener listener : listeners) {
-            List<Listener<Event>> eventListeners = listenerCache.get(listener.type);
+        for (final TypedListener listener : listeners) {
+            final List<Listener<Event>> eventListeners = listenerCache.get(listener.type);
             if (eventListeners == null)
                 continue;
 
