@@ -25,6 +25,6 @@ public class EventStateCancellable extends Event {
     }
 
     public void cancel() {
-        this.cancelled = false;
+        this.cancelled = true;
     }
 }

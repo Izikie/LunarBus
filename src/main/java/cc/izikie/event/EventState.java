@@ -1,7 +1,5 @@
 package cc.izikie.event;
 
-import cc.izikie.bus.EventBusImpl;
-
 public class EventState extends Event {
     private final byte state;
 

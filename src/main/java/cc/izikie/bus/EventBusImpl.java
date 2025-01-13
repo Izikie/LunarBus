@@ -89,15 +89,5 @@ public final class EventBusImpl implements EventBus {
             listeners.get(i).invoke(event);
     }
 
-    private static final class TypedListener {
-        private final Type type;
-        private final Listener<Event> listener;
-        private final byte priority;
-
-        public TypedListener(final Type type, final Listener<Event> listener, final byte priority) {
-            this.type = type;
-            this.listener = listener;
-            this.priority = priority;
-        }
-    }
+    private record TypedListener(Type type, Listener<Event> listener, byte priority) {}
 }

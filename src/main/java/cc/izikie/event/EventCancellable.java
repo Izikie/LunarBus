@@ -8,6 +8,6 @@ public class EventCancellable extends Event {
     }
 
     public void cancel() {
-        this.cancelled = false;
+        this.cancelled = true;
     }
 }
