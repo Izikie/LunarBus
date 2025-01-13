@@ -50,19 +50,10 @@ public final class EventBusImpl implements EventBus {
                 // Add Cache Entry
                 listenerCache.computeIfAbsent(event, key -> new ArrayList<>()).add(listener);
 
-                final List<TypedListener> list;
-                final TypedListener typedListener = new TypedListener(event, listener, priority);
-
                 // Add Subscriber (Don't Rebuild Cache)
-                if (subscriberMap.containsKey(subscriber)) {
-                    list = subscriberMap.get(subscriber);
-                    list.add(typedListener);
-                    list.sort((a, b) -> Byte.compare(b.priority, a.priority));
-                } else {
-                    list = new ArrayList<>();
-                    list.add(typedListener);
-                    subscriberMap.put(subscriber, list);
-                }
+                subscriberMap.computeIfAbsent(subscriber, key -> new ArrayList<>())
+                        .add(new TypedListener(event, listener, priority));
+                subscriberMap.get(subscriber).sort((a, b) -> Byte.compare(b.priority, a.priority));
             } catch (IllegalAccessException ignored) {
                 // Should Never Happen
             } catch (Throwable e) {
