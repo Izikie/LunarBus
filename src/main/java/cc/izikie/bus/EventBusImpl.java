@@ -11,33 +11,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.function.Consumer;
 
-/**
- * The {@code EventBusImpl} class is a concrete implementation of the {@link EventBus} interface.
- * It manages the subscription and unsubscription of event listeners and publishes events to them.
- *
- * <p>This class uses reflection to find fields annotated with {@link Listen} in subscriber objects
- * and registers them as event listeners. It maintains a cache of listeners for each event type
- * to efficiently publish events.</p>
- *
- * <p>When a subscriber is registered, all its fields annotated with {@link Listen} are inspected,
- * and the corresponding listeners are added to the cache. When an event is published, it is dispatched
- * to all listeners registered for that event type, in order of their priority.</p>
- *
- * <p>Example usage:</p>
- * <pre>
- * {@code
- * EventBus eventBus = EventBus.newInstance(System.out::println);
- * MyEventListener listener = new MyEventListener();
- * eventBus.subscribe(listener);
- * eventBus.publish(new MyEvent());
- * eventBus.unsubscribe(listener);
- * }
- * </pre>
- *
- * @see EventBus
- * @see Listen
- * @see Listener
- */
 public final class EventBusImpl implements EventBus {
     private static final MethodHandles.Lookup LOOKUP = MethodHandles.lookup();
 
@@ -125,30 +98,11 @@ public final class EventBusImpl implements EventBus {
             listeners.get(i).invoke(event);
     }
 
-    /**
-     * The {@code TypedListener} class represents a listener with a specific event type and priority.
-     * It is used internally by the {@link EventBusImpl} class to manage and dispatch events to the appropriate listeners.
-     *
-     * <p>This class holds the type of the event, the listener itself, and the priority of the listener.
-     * Listeners with higher priority levels are called before listeners with lower priority levels.</p>
-     *
-     * <p>Instances of this class are created when a subscriber is registered with the event bus, and they
-     * are stored in the cache for efficient event dispatching.</p>
-     *
-     * @see EventBusImpl
-     */
     private static final class TypedListener {
         private final Type type;
         private final Listener<Event> listener;
         private final byte priority;
 
-        /**
-         * Constructs a new {@code TypedListener} with the specified type, listener, and priority.
-         *
-         * @param type the type of the event
-         * @param listener the event listener
-         * @param priority the priority of the listener
-         */
         public TypedListener(final Type type, final Listener<Event> listener, final byte priority) {
             this.type = type;
             this.listener = listener;
