@@ -50,17 +50,16 @@ public final class EventBusImpl implements EventBus {
                 // Add Cache Entry
                 listenerCache.computeIfAbsent(event, key -> new ArrayList<>()).add(listener);
 
-                // Add Subscriber (Don't Rebuild Cache)
+                // Add Subscriber Entry
                 subscriberMap.computeIfAbsent(subscriber, key -> new ArrayList<>())
                         .add(new TypedListener(event, listener, priority));
                 subscriberMap.get(subscriber).sort((a, b) -> Byte.compare(b.priority, a.priority));
             } catch (IllegalAccessException ignored) {
                 // Should Never Happen
             } catch (Throwable e) {
-                // Error Log Exception From Inside Event Listener
-                logger.accept(String.format("ERROR: %s", e.getCause()));
+                // Error Log Exception
+                logger.accept(String.format("ERROR: %s", e));
             }
-
         }
     }
 
@@ -91,7 +90,7 @@ public final class EventBusImpl implements EventBus {
         if (listeners == null)
             return;
 
-        for (int i = listeners.size() - 1; i >= 0; i--)
+        for (int i = 0; i < listeners.size(); i++)
             listeners.get(i).invoke(event);
     }
 
