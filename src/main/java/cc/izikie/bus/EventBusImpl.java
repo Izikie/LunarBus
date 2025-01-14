@@ -45,15 +45,12 @@ public final class EventBusImpl implements EventBus {
                 final Listener<Event> listener = (Listener<Event>) LOOKUP.unreflectGetter(field)
                         .invokeWithArguments(subscriber);
 
-                final byte priority = annotation.priority();
-
                 // Add Cache Entry
                 listenerCache.computeIfAbsent(event, key -> new ArrayList<>()).add(listener);
 
                 // Add Subscriber Entry
                 subscriberMap.computeIfAbsent(subscriber, key -> new ArrayList<>())
-                        .add(new TypedListener(event, listener, priority));
-                subscriberMap.get(subscriber).sort((a, b) -> Byte.compare(b.priority, a.priority));
+                        .add(new TypedListener(event, listener));
             } catch (IllegalAccessException ignored) {
                 // Should Never Happen
             } catch (Throwable e) {
@@ -90,9 +87,10 @@ public final class EventBusImpl implements EventBus {
         if (listeners == null)
             return;
 
+        //noinspection ForLoopReplaceableByForEach
         for (int i = 0; i < listeners.size(); i++)
             listeners.get(i).invoke(event);
     }
 
-    private record TypedListener(Type type, Listener<Event> listener, byte priority) {}
+    private record TypedListener(Type type, Listener<Event> listener) {}
 }

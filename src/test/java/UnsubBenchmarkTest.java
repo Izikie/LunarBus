@@ -20,6 +20,6 @@ public final class UnsubBenchmarkTest {
         final long postMemory = Runtime.getRuntime().totalMemory() - Runtime.getRuntime().freeMemory();
 
         System.out.printf("1,000,000 event calls took %sms\n", postTests - preTests);
-        System.out.printf("Memory used: %s mb\n", postMemory - preMemory);
+        System.out.printf("Memory used: %s mb\n", Helper.toMB(postMemory - preMemory));
     }
 }
