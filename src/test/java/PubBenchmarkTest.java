@@ -16,8 +16,8 @@ public final class PubBenchmarkTest {
         bus.subscribe(this);
 
         System.gc();
-        final long preTests = System.currentTimeMillis();
         final long preMemory = Runtime.getRuntime().totalMemory() - Runtime.getRuntime().freeMemory();
+        final long preTests = System.currentTimeMillis();
 
         for (int i = 0; i < 1_000_000; i++)
             bus.publish(new TestEvent());

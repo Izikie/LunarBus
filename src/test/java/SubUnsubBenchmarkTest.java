@@ -9,8 +9,8 @@ public final class SubUnsubBenchmarkTest {
         final EventBusImpl bus = EventBus.newInstance(System.out::println);
 
         System.gc();
-        final long preTests = System.currentTimeMillis();
         final long preMemory = Runtime.getRuntime().totalMemory() - Runtime.getRuntime().freeMemory();
+        final long preTests = System.currentTimeMillis();
 
         for (int i = 1_000_000; i > 0; --i) {
             bus.subscribe(this);
