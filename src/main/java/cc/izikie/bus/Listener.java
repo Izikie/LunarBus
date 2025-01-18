@@ -1,6 +1,8 @@
 package cc.izikie.bus;
 
+import cc.izikie.event.Event;
+
 @FunctionalInterface
-public interface Listener<Event> {
-    void invoke(final Event event);
+public interface Listener<E extends Event> {
+    void invoke(final E event);
 }

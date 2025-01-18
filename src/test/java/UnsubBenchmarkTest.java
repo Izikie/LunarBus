@@ -1,25 +1,23 @@
-import cc.izikie.bus.EventBus;
-import cc.izikie.bus.EventBusImpl;
+import cc.izikie.bus.LunarBus;
 import org.junit.jupiter.api.Test;
 
 public final class UnsubBenchmarkTest {
 
+    final int iterations = 10;
+
     @Test
     public void benchmark() {
-        final EventBusImpl bus = EventBus.newInstance(System.out::println);
-
         System.gc();
         final long preMemory = Runtime.getRuntime().totalMemory() - Runtime.getRuntime().freeMemory();
         final long preTests = System.currentTimeMillis();
 
-        for (int i = 100_000_000; i > 0; --i) {
-            bus.unsubscribe(this);
-        }
+        for (int i = 0; i < 1_000_000; i++)
+            LunarBus.INSTANCE.unsubscribe(this);
 
         final long postTests = System.currentTimeMillis();
         final long postMemory = Runtime.getRuntime().totalMemory() - Runtime.getRuntime().freeMemory();
 
-        System.out.printf("1,000,000 event calls took %sms\n", postTests - preTests);
-        System.out.printf("Memory used: %s mb\n", Helper.toMB(postMemory - preMemory));
+        System.out.printf("%s Calls: %, d ms\n", iterations, postTests - preTests);
+        System.out.printf("Memory: %, f mb\n", Helper.toMB(postMemory - preMemory));
     }
 }

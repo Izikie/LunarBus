@@ -1,7 +1,7 @@
 import cc.izikie.bus.LunarBus;
 import org.junit.jupiter.api.Test;
 
-public final class SubBenchmarkTest {
+public final class SubUnSubBenchmarkTest {
 
     final int iterations = 10;
 
@@ -13,6 +13,9 @@ public final class SubBenchmarkTest {
 
         for (int i = 0; i < 1_000_000; i++)
             LunarBus.INSTANCE.subscribe(this);
+
+        for (int i = 0; i < 1_000_000; i++)
+            LunarBus.INSTANCE.unsubscribe(this);
 
         final long postTests = System.currentTimeMillis();
         final long postMemory = Runtime.getRuntime().totalMemory() - Runtime.getRuntime().freeMemory();

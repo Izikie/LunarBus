@@ -1,32 +1,32 @@
-import cc.izikie.bus.EventBus;
-import cc.izikie.bus.EventBusImpl;
 import cc.izikie.bus.Listener;
+import cc.izikie.bus.LunarBus;
 import org.junit.jupiter.api.Test;
 
 public final class PubBenchmarkTest {
 
-    public final Listener<TestEvent> testListener = event -> {
+    int i;
+
+    public final Listener<TestEvent> onTest = event -> {
+        System.out.println(i++);
     };
 
+    final int iterations = 10;
 
     @Test
     public void benchmark() {
-        final EventBusImpl bus = EventBus.newInstance(System.out::println);
-
-        bus.subscribe(this);
+        LunarBus.INSTANCE.subscribe(this);
 
         System.gc();
         final long preMemory = Runtime.getRuntime().totalMemory() - Runtime.getRuntime().freeMemory();
         final long preTests = System.currentTimeMillis();
 
-        for (int i = 0; i < 1_000_000; i++)
-            bus.publish(new TestEvent());
-
+        for (int i = 0; i < iterations; i++)
+            LunarBus.INSTANCE.publish(new TestEvent());
 
         final long postTests = System.currentTimeMillis();
         final long postMemory = Runtime.getRuntime().totalMemory() - Runtime.getRuntime().freeMemory();
 
-        System.out.printf("1,000,000 event calls took %sms\n", postTests - preTests);
-        System.out.printf("Memory used: %s mb\n", Helper.toMB(postMemory - preMemory));
+        System.out.printf("%s Calls: %, d ms\n", iterations, postTests - preTests);
+        System.out.printf("Memory: %, f mb\n", Helper.toMB(postMemory - preMemory));
     }
 }

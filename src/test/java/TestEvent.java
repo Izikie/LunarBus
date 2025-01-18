@@ -1,3 +1,3 @@
 import cc.izikie.event.Event;
 
-public class TestEvent extends Event {}
+public final class TestEvent extends Event {}
