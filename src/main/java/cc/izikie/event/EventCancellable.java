@@ -3,11 +3,11 @@ package cc.izikie.event;
 public class EventCancellable extends Event {
     private boolean cancelled;
 
-    public boolean isCancelled() {
-        return this.cancelled;
+    public final boolean isCancelled() {
+        return cancelled;
     }
 
-    public void cancel() {
+    public final void cancel() {
         this.cancelled = true;
     }
 }
