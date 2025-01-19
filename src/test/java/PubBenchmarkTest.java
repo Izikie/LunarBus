@@ -4,13 +4,10 @@ import org.junit.jupiter.api.Test;
 
 public final class PubBenchmarkTest {
 
-    int i;
-
     public final Listener<TestEvent> onTest = event -> {
-        System.out.println(i++);
     };
 
-    final int iterations = 10;
+    final int iterations = 1_000_000;
 
     @Test
     public void benchmark() {

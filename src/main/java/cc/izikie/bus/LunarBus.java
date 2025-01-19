@@ -11,15 +11,16 @@ public enum LunarBus {
 
     private final MethodHandles.Lookup LOOKUP = MethodHandles.lookup();
 
-    private final Map<Object, List<Listener<Event>>> listeners = new LinkedHashMap<>();
+    private final Map<Object, List<TypedListener>> listeners = new LinkedHashMap<>();
 
     public void subscribe(final Object subscriber) {
         if (listeners.containsKey(subscriber))
             return;
 
-        final List<Listener<Event>> subscriberListeners = new LinkedList<>();
+        final Class<?> subscriberClass = subscriber.getClass();
+        final List<TypedListener> subscriberListeners = new ArrayList<>();
 
-        for (final Field field : subscriber.getClass().getDeclaredFields()) {
+        for (final Field field : subscriberClass.getDeclaredFields()) {
             if (field.getType() != Listener.class)
                 continue;
 
@@ -27,8 +28,10 @@ public enum LunarBus {
                 if (!ensureAccessible(field))
                     continue;
 
-                subscriberListeners.add((Listener<Event>) LOOKUP.unreflectGetter(field)
-                        .invokeWithArguments(subscriber));
+                subscriberListeners.add(new TypedListener(
+                        ((ParameterizedType) field.getGenericType()).getActualTypeArguments()[0],
+                        (Listener<Event>) LOOKUP.unreflectGetter(field).invokeWithArguments(subscriber))
+                );
             } catch (final Throwable e) {
                 System.err.printf("ERROR: Unexpected error with field '%s' in '%s': %s%n",
                         field.getName(), subscriber.getClass().getName(), e.getMessage());
@@ -43,11 +46,8 @@ public enum LunarBus {
     }
 
     public void publish(final Event event) {
-        for (final List<Listener<Event>> listenerList : listeners.values()) {
-            for (final Listener<Event> eventListener : listenerList) {
-                eventListener.invoke(event);
-            }
-        }
+        for (final TypedListener listener : listeners.getOrDefault(event.getClass(), Collections.emptyList()))
+            listener.listener().invoke(event);
     }
 
     public boolean ensureAccessible(final Field field) {

@@ -3,7 +3,7 @@ import org.junit.jupiter.api.Test;
 
 public final class SubUnSubBenchmarkTest {
 
-    final int iterations = 10;
+    final int iterations = 1_000_000;
 
     @Test
     public void benchmark() {
@@ -11,10 +11,10 @@ public final class SubUnSubBenchmarkTest {
         final long preMemory = Runtime.getRuntime().totalMemory() - Runtime.getRuntime().freeMemory();
         final long preTests = System.currentTimeMillis();
 
-        for (int i = 0; i < 1_000_000; i++)
+        for (int i = 0; i < iterations; i++)
             LunarBus.INSTANCE.subscribe(this);
 
-        for (int i = 0; i < 1_000_000; i++)
+        for (int i = 0; i < iterations; i++)
             LunarBus.INSTANCE.unsubscribe(this);
 
         final long postTests = System.currentTimeMillis();
